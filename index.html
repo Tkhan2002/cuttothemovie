@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CutToTheMovie — When It Actually Starts</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#080808;
+  --surface:#111111;
+  --card:#161616;
+  --border:#232323;
+  --border-hi:#383838;
+  --text:#f0ede8;
+  --text2:#aaa9a4;
+  --text3:#555550;
+  --gold:#c9a227;
+  --gold-bg:#1a1500;
+  --gold-border:#5a4510;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:15px;line-height:1.6;min-height:100vh}
+
+/* TICKER */
+.ticker{background:var(--gold);padding:0.35rem 0;overflow:hidden;white-space:nowrap}
+.ticker-track{display:inline-flex;animation:tick 40s linear infinite}
+.ticker-track span{padding:0 3rem;font-size:0.72rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:#000}
+@keyframes tick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* HEADER */
+header{
+  position:sticky;top:0;z-index:100;
+  background:rgba(8,8,8,0.96);
+  backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border);
+}
+.header-inner{
+  max-width:1240px;margin:0 auto;padding:0 2rem;
+  height:62px;display:flex;align-items:center;justify-content:space-between;
+}
+.logo{font-family:'Playfair Display',serif;font-style:italic;font-weight:900;font-size:1.45rem;color:var(--gold);text-decoration:none;letter-spacing:-0.02em}
+.logo b{color:#fff;font-style:normal;font-weight:700}
+nav{display:flex;gap:0.2rem}
+nav a{color:var(--text2);text-decoration:none;font-size:0.78rem;font-weight:500;padding:0.35rem 0.8rem;border-radius:5px;transition:all 0.15s;letter-spacing:0.05em;text-transform:uppercase}
+nav a:hover{color:var(--text);background:#1a1a1a}
+nav a.amc:hover{color:#ff3a50}
+nav a.regal:hover{color:#6688ee}
+nav a.cinemark:hover{color:#33aaff}
+
+/* HERO */
+.hero{max-width:1240px;margin:0 auto;padding:4.5rem 2rem 3.5rem;text-align:center}
+.eyebrow{font-size:0.7rem;letter-spacing:0.16em;text-transform:uppercase;color:var(--gold);margin-bottom:1.1rem}
+.hero h1{font-family:'Playfair Display',serif;font-size:clamp(2rem,5vw,3.6rem);font-weight:900;line-height:1.1;color:var(--text);margin-bottom:1.2rem}
+.hero h1 em{font-style:italic;color:var(--gold)}
+.hero p{font-size:1rem;color:var(--text2);max-width:500px;margin:0 auto 2rem;line-height:1.75}
+.badge{display:inline-flex;align-items:center;gap:0.6rem;background:var(--gold-bg);border:1px solid var(--gold-border);color:var(--gold);padding:0.5rem 1.4rem;border-radius:2rem;font-size:0.82rem;font-weight:500}
+.badge-dot{width:6px;height:6px;border-radius:50%;background:var(--gold);animation:pulse 2.2s ease-in-out infinite;flex-shrink:0}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.4;transform:scale(0.6)}}
+
+/* HOW IT WORKS */
+.how{max-width:1240px;margin:0 auto;padding:1.5rem 2rem 3.5rem;display:flex;justify-content:center;gap:2rem;flex-wrap:wrap}
+.how-step{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:1.25rem 1.5rem;flex:1;min-width:200px;max-width:260px;text-align:center}
+.how-num{font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:900;color:var(--gold);opacity:0.5;line-height:1}
+.how-step h3{font-size:0.85rem;font-weight:500;color:var(--text);margin:0.4rem 0 0.3rem}
+.how-step p{font-size:0.78rem;color:var(--text2);line-height:1.5}
+
+/* CHAIN SECTION */
+.chain-section{border-top:1px solid var(--border);padding:3rem 0 4rem}
+.chain-header{max-width:1240px;margin:0 auto;padding:0 2rem 1.25rem;display:flex;align-items:center;gap:1.2rem;flex-wrap:wrap}
+.chain-logo-badge{padding:0.3rem 0.9rem;border-radius:4px;font-size:0.72rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase}
+.chain-name{font-family:'Playfair Display',serif;font-size:1.7rem;font-weight:700;color:var(--text)}
+.chain-subline{font-size:0.8rem;color:var(--text3);margin-left:auto;letter-spacing:0.02em}
+
+/* LOCATION TABS */
+.location-bar{max-width:1240px;margin:0 auto;padding:0 2rem 1.5rem;display:flex;gap:0.5rem;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none}
+.location-bar::-webkit-scrollbar{display:none}
+.loc-tab{flex-shrink:0;padding:0.5rem 1rem;background:transparent;border:1px solid var(--border);border-radius:6px;color:var(--text2);font-size:0.78rem;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all 0.15s;white-space:nowrap;text-align:left}
+.loc-tab:hover{border-color:var(--border-hi);color:var(--text)}
+.loc-tab.active{color:var(--text);background:rgba(255,255,255,0.04)}
+.loc-tab strong{display:block;font-weight:500;font-size:0.78rem}
+.loc-tab small{display:block;font-size:0.68rem;color:var(--text3);margin-top:1px}
+
+/* LOCATION PANEL */
+.location-panel{display:none}
+.location-panel.active{display:block}
+
+/* MOVIES GRID */
+.movies-wrap{max-width:1240px;margin:0 auto;padding:0 2rem}
+.movies-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:1rem}
+
+/* MOVIE CARD */
+.movie-card{background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;transition:border-color 0.2s,transform 0.15s}
+.movie-card:hover{border-color:var(--border-hi);transform:translateY(-1px)}
+.movie-poster{height:80px;display:flex;align-items:center;justify-content:center;padding:0 1rem;position:relative;overflow:hidden}
+.poster-noise{position:absolute;inset:0;opacity:0.04;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.poster-title{font-family:'Playfair Display',serif;font-weight:700;font-size:0.95rem;text-align:center;z-index:1;line-height:1.25}
+.movie-body{padding:0.9rem 1.1rem 1.1rem}
+.movie-meta{display:flex;align-items:center;gap:0.4rem;flex-wrap:wrap;margin-bottom:0.85rem}
+.tag{font-size:0.67rem;padding:0.18rem 0.5rem;border-radius:3px;font-weight:500;letter-spacing:0.03em;background:#1e1e1e;color:var(--text2);border:1px solid var(--border)}
+.tag.rating{border-color:var(--border-hi)}
+.sep{color:var(--border-hi);font-size:0.7rem}
+.times-label{font-size:0.66rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--text3);margin-bottom:0.5rem;font-weight:500}
+.chips{display:flex;flex-wrap:wrap;gap:0.35rem}
+.chip{background:#0e0e0e;border:1px solid var(--border);border-radius:6px;padding:0.4rem 0.65rem;cursor:pointer;transition:all 0.15s;text-align:center;min-width:85px}
+.chip:hover{background:rgba(255,255,255,0.04)}
+.chip .actual{display:block;font-size:0.85rem;font-weight:500;color:var(--text);letter-spacing:-0.01em}
+.chip .listed{display:block;font-size:0.62rem;color:var(--text3);text-decoration:line-through;text-decoration-color:#3a3a3a;margin-top:1px}
+
+/* DIVIDER */
+.filmstrip{height:20px;background:repeating-linear-gradient(90deg,#191919 0,#191919 22px,var(--bg) 22px,var(--bg) 34px);opacity:0.4}
+
+/* FOOTER */
+footer{border-top:1px solid var(--border);padding:2.5rem 2rem;text-align:center;color:var(--text3);font-size:0.78rem;line-height:2}
+footer strong{color:var(--text2)}
+footer .gold{color:var(--gold)}
+
+/* RESPONSIVE */
+@media(max-width:640px){
+  .header-inner{padding:0 1rem}
+  .hero{padding:3rem 1rem 2.5rem}
+  .chain-header,.location-bar,.movies-wrap{padding-left:1rem;padding-right:1rem}
+  .movies-grid{grid-template-columns:1fr}
+  .how{gap:0.75rem}
+  .how-step{min-width:140px}
+}
+</style>
+</head>
+<body>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-track" id="tickerTrack">
+    <span>✦ We add 25 minutes to every listed showtime</span>
+    <span>✦ Trailers &amp; ads run ~25 minutes before every movie</span>
+    <span>✦ Stop rushing — arrive when it actually starts</span>
+    <span>✦ AMC · Regal · Cinemark — all times adjusted</span>
+    <span>✦ We add 25 minutes to every listed showtime</span>
+    <span>✦ Trailers &amp; ads run ~25 minutes before every movie</span>
+    <span>✦ Stop rushing — arrive when it actually starts</span>
+    <span>✦ AMC · Regal · Cinemark — all times adjusted</span>
+  </div>
+</div>
+
+<!-- HEADER -->
+<header>
+  <div class="header-inner">
+    <a class="logo" href="#">Cut<b>To</b>TheMovie</a>
+    <nav>
+      <a href="#amc" class="amc">AMC</a>
+      <a href="#regal" class="regal">Regal</a>
+      <a href="#cinemark" class="cinemark">Cinemark</a>
+    </nav>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <p class="eyebrow">The honest movie time site</p>
+  <h1>Skip the ads.<br>Arrive when it <em>actually</em> starts.</h1>
+  <p>Every time you see here is the real start time — the listed showtime plus the ~25 minutes of trailers and ads you never asked for.</p>
+  <div class="badge">
+    <span class="badge-dot"></span>
+    Listed time + 25 min = When the movie actually starts
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<div class="how">
+  <div class="how-step">
+    <div class="how-num">01</div>
+    <h3>Find your theater</h3>
+    <p>Browse AMC, Regal, or Cinemark locations near you</p>
+  </div>
+  <div class="how-step">
+    <div class="how-num">02</div>
+    <h3>See the real time</h3>
+    <p>We show the actual start time — no more sitting through ads</p>
+  </div>
+  <div class="how-step">
+    <div class="how-num">03</div>
+    <h3>Arrive on time</h3>
+    <p>Walk in, sit down, and the movie starts. Simple as that.</p>
+  </div>
+</div>
+
+<div class="filmstrip"></div>
+
+<!-- CHAINS RENDERED BY JS -->
+<div id="chains-root"></div>
+
+<!-- FOOTER -->
+<footer>
+  <strong>CutToTheMovie.com</strong><br>
+  Showtimes are listed times <span class="gold">+ 25 minutes</span>. We don't sell your data. We don't show ads. We just tell you when the movie starts.<br>
+  <span style="color:#333">Showtimes are sample data — visit each theater's official website to confirm.</span>
+</footer>
+
+<script>
+function addMins(t, add) {
+  const [time, per] = t.trim().split(' ');
+  const [hs, ms] = time.split(':');
+  let h = +hs, m = +ms;
+  if (per === 'PM' && h !== 12) h += 12;
+  if (per === 'AM' && h === 12) h = 0;
+  let tot = h * 60 + m + add;
+  tot = ((tot % 1440) + 1440) % 1440;
+  let nh = Math.floor(tot / 60), nm = tot % 60;
+  const np = nh < 12 ? 'AM' : 'PM';
+  if (nh === 0) nh = 12; else if (nh > 12) nh -= 12;
+  return `${nh}:${String(nm).padStart(2,'0')} ${np}`;
+}
+
+const MOVIES = [
+  {
+    title:"Thunderbolts*",rating:"PG-13",runtime:"2h 7m",genre:"Action / Sci-Fi",
+    bg:"linear-gradient(135deg,#111228,#1e204a)",tc:"#7b90ff",
+    times:['10:15 AM','1:00 PM','3:45 PM','6:30 PM','9:15 PM','11:45 PM']
+  },
+  {
+    title:"Final Destination: Bloodlines",rating:"R",runtime:"1h 50m",genre:"Horror / Thriller",
+    bg:"linear-gradient(135deg,#170505,#2d0a0a)",tc:"#dd4444",
+    times:['11:00 AM','1:30 PM','4:05 PM','7:00 PM','9:30 PM']
+  },
+  {
+    title:"Mission: Impossible — The Final Reckoning",rating:"PG-13",runtime:"2h 49m",genre:"Action / Thriller",
+    bg:"linear-gradient(135deg,#060e1a,#0d1f38)",tc:"#5599dd",
+    times:['10:30 AM','2:00 PM','5:30 PM','9:00 PM']
+  },
+  {
+    title:"Lilo & Stitch",rating:"PG",runtime:"1h 48m",genre:"Family / Comedy",
+    bg:"linear-gradient(135deg,#060e1a,#0a2438)",tc:"#33bbee",
+    times:['10:00 AM','12:15 PM','2:30 PM','4:45 PM','7:00 PM']
+  },
+  {
+    title:"Sinners",rating:"R",runtime:"2h 17m",genre:"Horror / Drama",
+    bg:"linear-gradient(135deg,#100806,#251510)",tc:"#cc7744",
+    times:['11:30 AM','2:15 PM','5:00 PM','7:45 PM','10:30 PM']
+  },
+  {
+    title:"A Minecraft Movie",rating:"PG",runtime:"1h 41m",genre:"Adventure / Family",
+    bg:"linear-gradient(135deg,#060e06,#0a1c0a)",tc:"#55bb55",
+    times:['10:45 AM','12:30 PM','2:30 PM','4:30 PM','6:30 PM','8:30 PM']
+  },
+  {
+    title:"The Accountant 2",rating:"R",runtime:"2h 12m",genre:"Action / Thriller",
+    bg:"linear-gradient(135deg,#0c0c0c,#1a1a1a)",tc:"#aaaaaa",
+    times:['11:15 AM','2:00 PM','4:45 PM','7:30 PM','10:15 PM']
+  }
+];
+
+const CHAINS = [
+  {
+    id:'amc',name:'AMC Theatres',short:'AMC',
+    accent:'#e31837',accentBg:'rgba(227,24,55,0.12)',accentBadge:'#2a0008',
+    offsets:[0,15,30,-10,45],
+    movieSets:[[0,1,2,3,4,5,6],[0,1,2,3,4,6],[1,2,3,4,5,6],[0,2,3,4,5,6],[0,1,3,4,5,6]],
+    locations:[
+      {name:'AMC Empire 25',city:'New York, NY',addr:'234 W 42nd St'},
+      {name:'AMC Metreon 16',city:'San Francisco, CA',addr:'135 4th St'},
+      {name:'AMC Burbank 16',city:'Burbank, CA',addr:'125 E Palm Ave'},
+      {name:'AMC Boston Common 19',city:'Boston, MA',addr:'175 Tremont St'},
+      {name:'AMC Lincoln Square 13',city:'New York, NY',addr:'1998 Broadway'},
+    ]
+  },
+  {
+    id:'regal',name:'Regal Cinemas',short:'Regal',
+    accent:'#3355cc',accentBg:'rgba(51,85,204,0.12)',accentBadge:'#050a20',
+    offsets:[20,35,-5,40,25],
+    movieSets:[[0,1,2,3,4,5],[0,1,2,3,5,6],[1,2,3,4,5,6],[0,2,3,4,5,6],[0,1,3,4,6]],
+    locations:[
+      {name:'Regal Union Square',city:'New York, NY',addr:'850 Broadway'},
+      {name:'Regal LA Live',city:'Los Angeles, CA',addr:'1000 W Olympic Blvd'},
+      {name:'Regal Fenway',city:'Boston, MA',addr:'201 Brookline Ave'},
+      {name:'Regal Crossroads',city:'Bellevue, WA',addr:'15600 NE 8th St'},
+      {name:'Regal Irvine Spectrum',city:'Irvine, CA',addr:'71 Fortune Dr'},
+    ]
+  },
+  {
+    id:'cinemark',name:'Cinemark',short:'Cinemark',
+    accent:'#0088dd',accentBg:'rgba(0,136,221,0.12)',accentBadge:'#001428',
+    offsets:[10,-15,25,45,30],
+    movieSets:[[0,1,2,3,4,5,6],[0,1,2,4,5,6],[1,2,3,4,5,6],[0,2,3,4,5,6],[0,1,3,4,5]],
+    locations:[
+      {name:'Cinemark Legacy',city:'Plano, TX',addr:'7201 Dallas Pkwy'},
+      {name:'Century 20 Daly City',city:'Daly City, CA',addr:'1901 Junipero Serra Blvd'},
+      {name:'Cinemark 17',city:'Dallas, TX',addr:'11819 Webb Chapel Rd'},
+      {name:'Cinemark Easton 30',city:'Columbus, OH',addr:'3900 Morse Rd'},
+      {name:'Cinemark Tinseltown 290',city:'Houston, TX',addr:'290 at Beltway 8'},
+    ]
+  }
+];
+
+function buildChip(listedTime, accentBg) {
+  const actual = addMins(listedTime, 25);
+  return `<div class="chip" style="--hover-bg:${accentBg}">
+    <span class="actual">${actual}</span>
+    <span class="listed">${listedTime}</span>
+  </div>`;
+}
+
+function buildMovieCard(movie, offset, accent, accentBg) {
+  const shownTimes = movie.times.map(t => addMins(t, offset));
+  const listedTimes = movie.times.map(t => addMins(t, offset - 25));
+  const chips = listedTimes.map(lt => buildChip(lt, accentBg)).join('');
+  return `<div class="movie-card">
+    <div class="movie-poster" style="background:${movie.bg}">
+      <div class="poster-noise"></div>
+      <div class="poster-title" style="color:${movie.tc}">${movie.title}</div>
+    </div>
+    <div class="movie-body">
+      <div class="movie-meta">
+        <span class="tag rating">${movie.rating}</span>
+        <span class="sep">·</span>
+        <span class="tag">${movie.runtime}</span>
+        <span class="sep">·</span>
+        <span class="tag">${movie.genre}</span>
+      </div>
+      <div class="times-label">Actual start times</div>
+      <div class="chips">${chips}</div>
+    </div>
+  </div>`;
+}
+
+function buildLocationPanel(chain, locIdx) {
+  const loc = chain.locations[locIdx];
+  const offset = chain.offsets[locIdx];
+  const movieSet = chain.movieSets[locIdx];
+  const cards = movieSet.map(mi => buildMovieCard(MOVIES[mi], offset, chain.accent, chain.accentBg)).join('');
+  const panelId = `${chain.id}-panel-${locIdx}`;
+  return `<div class="location-panel${locIdx===0?' active':''}" id="${panelId}" data-chain="${chain.id}" data-loc="${locIdx}">
+    <div class="movies-wrap">
+      <div class="movies-grid">${cards}</div>
+    </div>
+  </div>`;
+}
+
+function buildChainSection(chain) {
+  const tabs = chain.locations.map((loc, i) =>
+    `<button class="loc-tab${i===0?' active':''}" onclick="switchTab('${chain.id}',${i})" id="tab-${chain.id}-${i}" style="${i===0?`border-color:${chain.accent};color:#fff`:''}" >
+      <strong>${loc.name}</strong>
+      <small>${loc.city}</small>
+    </button>`
+  ).join('');
+
+  const panels = chain.locations.map((_, i) => buildLocationPanel(chain, i)).join('');
+
+  return `<section class="chain-section" id="${chain.id}">
+    <div class="chain-header">
+      <span class="chain-logo-badge" style="background:${chain.accentBadge};color:${chain.accent};border:1px solid ${chain.accent}22">${chain.short}</span>
+      <h2 class="chain-name">${chain.name}</h2>
+      <span class="chain-subline">Select a location</span>
+    </div>
+    <div class="location-bar" id="locbar-${chain.id}">${tabs}</div>
+    ${panels}
+  </section><div class="filmstrip"></div>`;
+}
+
+document.getElementById('chains-root').innerHTML = CHAINS.map(buildChainSection).join('');
+
+function switchTab(chainId, locIdx) {
+  document.querySelectorAll(`#locbar-${chainId} .loc-tab`).forEach((tab, i) => {
+    tab.classList.toggle('active', i === locIdx);
+    const chain = CHAINS.find(c => c.id === chainId);
+    tab.style.borderColor = i === locIdx ? chain.accent : '';
+    tab.style.color = i === locIdx ? '#fff' : '';
+  });
+  document.querySelectorAll(`[data-chain="${chainId}"]`).forEach(panel => {
+    panel.classList.toggle('active', +panel.dataset.loc === locIdx);
+  });
+}
+
+// Hover accent color on chips
+document.querySelectorAll('.chip').forEach(chip => {
+  const hoverBg = chip.style.getPropertyValue('--hover-bg') || 'rgba(255,255,255,0.04)';
+  chip.addEventListener('mouseenter', () => { chip.style.background = hoverBg; chip.style.borderColor = '#444'; });
+  chip.addEventListener('mouseleave', () => { chip.style.background = ''; chip.style.borderColor = ''; });
+});
+</script>
+</body>
+</html>
